@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - network_act05
+
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    ports:
+      - "8089:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+    networks:
+      - network_act05
+
+
+
+networks:
+  network_act05:
+    driver: bridge
+
+volumes:
+  mongo_data:
+
