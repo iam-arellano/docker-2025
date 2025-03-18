@@ -1,0 +1,32 @@
+version: '3.8'
+
+networks:
+  act_07:
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb_container
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - act_07
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build: .
+    container_name: node_app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    networks:
+      - act_07
+    environment:
+      MONGO_URI: "mongodb://mongodb:27017/cruddb"
+
+volumes:
+  mongo_data:
