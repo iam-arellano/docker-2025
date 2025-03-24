@@ -1,0 +1,48 @@
+version: '3.8'
+
+networks:
+  act_10:
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb_container
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - act_10
+    volumes:
+      - mongo_datav10:/data/db
+
+  app:
+    build: .
+    container_name: node_app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    networks:
+      - act_10
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    ports:
+      - "8089:8081"
+    networks:
+      - act_10
+    depends_on:
+      - mongodb
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: password
+
+
+
+volumes:
+  mongo_datav10:
